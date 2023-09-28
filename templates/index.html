@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <title>メモアプリ</title>
+</head>
+<body>
+    <div class="container">
+    <h1 class="text-center">メモアプリ</h1>
+    <div class="text-center">
+    <form method="POST" action="/add_memo">
+        <input type="text" name="content" placeholder="メモを入力">
+        <button class="btn btn-info btn-lg m-5" type="submit">追加</button>
+    </form>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p style="color: {% if message.startswith('success') %}green{% else %}red{% endif %}">{{ message.split(' ', 1)[1] }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    </div>
+    {% for memo in memos %}
+        <div class="card w-50 mb-3 text-end" style="margin: auto;">
+            <div class="card-body">
+                <h3 class="card-header">{{ memo.content }} </h3>
+                <div class="card-text text-right">
+                    <a class="btn btn-danger btn-sm" href="/delete_memo/{{ memo.id }}">削除</a>
+                </div>
+                <div class="card-text text-lg-right">作成日時: {{ memo.datetime }}</div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+</body>
+</html>
